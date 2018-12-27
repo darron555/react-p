@@ -1,0 +1,30 @@
+.App {
+  text-align: center;
+}
+.App-link {
+  color: #61dafb;
+}
+
+.AppButton {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  font-weight: bold;
+  text-transform: uppercase;
+
+  &:focus, &:active {
+    outline: none;
+  }
+
+  &:hover {
+  background: #ffaaaa;
+}
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
