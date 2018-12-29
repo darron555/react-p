@@ -1,63 +1,49 @@
 import React, {Component} from 'react'
+import {connect} from 'react-redux'
+
 import './App.scss'
-import {Route, NavLink, Switch, Redirect} from "react-router-dom";
-import About from './About/About'
-import Cars from './Cars/Cars'
-import CarDetail from './CarDetail/CarDetail'
+import Counter from './Counter'
+import {add, addN, sub, onAsyncAdd} from "./redux/actions/actions";
 
 class App extends Component {
 
-    state = {
-        isLoggedIn: false
-    }
-
-
     render() {
-
         return (
-            <div>
-                <nav className="nav">
-                    <ul>
-                        <li>
-                            <NavLink to="/"
-                                     exact
-                            >Home</NavLink>
-                        </li>
-                        <li>
-                            <NavLink to="/about"
-                                     activeStyle={{
-                                         color: 'blue'
-                                     }}
-                            >About</NavLink>
-                        </li>
-                        <li>
-                            <NavLink to={{pathname: '/cars'}}>Cars</NavLink>
-                        </li>
-                    </ul>
-                </nav>
-                <hr/>
-                <h3>Is logged in {this.state.isLoggedIn ? 'true' : 'false'}</h3>
-                <button onClick={() => this.setState({isLoggedIn: true})}>Login</button>
+            <div className={'App'}>
+                <h1>Счетчик <strong>{this.props.counter}</strong></h1>
 
                 <hr/>
-                <Switch>
-                    <Route path={'/'} exact render={() => <h1>Home Page</h1>}/>
 
-                    {this.state.isLoggedIn ? <Route path={'/about'}  component={About}/> : null}
+                <div className="Actions">
+                    <button onClick={this.props.onAdd}>Добавить 1</button>
+                    <button onClick={this.props.onSub}>Вычесть 1</button>
+                    <button onClick={this.props.onAddNumber.bind(this, 15)}>Добавить число</button>
+                </div>
 
+                <div className="Actions">
+                    <button onClick={() => this.props.onAsyncAdd(1000)}>Асинхронно Добавить 1000</button>
 
-                    <Route path={'/cars/:name'}  component={CarDetail}/>
+                </div>
 
-                    <Route path={'/cars'}  component={Cars}/>
-                    <Redirect to={'/cars'} />
-                    {/*<Route render={() => <h1 style={{color: 'red',textAlign: 'center'}}>404 not found</h1>} />*/}
-                </Switch>
-
-
-
+                <Counter />
             </div>
-        );
+        )
     }
 }
 
-export default App
+function mapStateProps(state) {
+    return {
+        counter: state.counter1.counter
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        onAdd: () => dispatch(add()),
+        onSub: () => dispatch(sub()),
+        onAddNumber: (number) => dispatch(addN(number)),
+        onAsyncAdd: number => dispatch(onAsyncAdd(number))
+    }
+}
+
+export default connect(mapStateProps, mapDispatchToProps)(App)
